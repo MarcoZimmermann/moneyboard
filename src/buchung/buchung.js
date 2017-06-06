@@ -1,0 +1,72 @@
+import React from 'react';
+import {
+    Grid,
+    Col,
+    Button,
+    Form,
+    FormGroup,
+    ControlLabel,
+    FormControl
+} from 'react-bootstrap';
+import {FormSelect} from '../components/controls.js'
+
+class Buchung extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            value: 0,
+            categories: ['Haus und Hof', 'Einkauf', 'Freizeit']
+        };
+    }
+
+    componentDidMount() {
+        this.setState({category: this.state.categories[1]});
+    }
+
+
+    addEntry() {
+      
+    }
+
+    render() {
+        const categories = this.state.categories;
+
+        return (
+
+            <Grid>
+                <Col md={4}>
+
+                    <Form horizontal>
+                        <FormGroup controlId="formHorizontalValue">
+                            <Col componentClass={ControlLabel} sm={3}>Betrag</Col>
+                            <Col sm={9}>
+                                <FormControl type="text" placeholder="Betrag"/>
+                            </Col>
+                        </FormGroup>
+
+                        <FormGroup controlId="formHorizontalCategory">
+                            <Col componentClass={ControlLabel} sm={3}>Kategorie</Col>
+                            <Col sm={9}>
+                                <FormSelect
+                                    values={categories}
+                                    selected={this.state.category}
+                                    onChange={x => this.setState({category: x})}/>
+                            </Col>
+                        </FormGroup>
+
+                        <FormGroup >
+                            <Col sm={12}>
+                                <Button className="pull-right" onClick={e => this.addEntry()}>Buchen</Button>
+                            </Col>
+                        </FormGroup>
+
+                    </Form>
+                </Col>
+            </Grid>
+
+        );
+    }
+}
+
+export default Buchung;
