@@ -24,7 +24,7 @@ class Buchung extends React.Component {
         this.setState({category: this.state.categories[1]});
     }
 
-
+    
     addEntry() {
       
     }
