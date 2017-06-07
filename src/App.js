@@ -83,8 +83,6 @@ class App extends Component {
          
         <Router>
           <div className="App"> 
-          {/*<Row>
-            <Col md={1}>*/}
               <div className="navigationbar-wrapper">
                 <img src={logo} className="App-logo" alt="logo" />
                 <ul className="reactNavElement">
@@ -93,15 +91,11 @@ class App extends Component {
                   <li><NavLink activeClassName="selected" to="/topics">Topics</NavLink></li>
                 </ul>
               </div>
-          {/*</Col>
-          <Col md={10}>*/}
           <div className="mainContent">
             <Route exact path="/" component={Home}/>
             <Route path="/addentry" component={Buchung}/>
             <Route path="/topics" component={Topics}/>
           </div>
-          {/*</Col>
-        </Row>*/}
         </div>
       </Router>    
     );
