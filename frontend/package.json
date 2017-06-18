@@ -11,11 +11,12 @@
   },
   "devDependencies": {
     "react-scripts": "1.0.7"
-  },
+  },  
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "proxy": "http://localhost:3001"
 }

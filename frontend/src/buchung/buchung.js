@@ -23,12 +23,15 @@ class Buchung extends React.Component {
     }
 
     componentDidMount() {
-      //  this.setState({category: this.state.categories[1]});
+        const that = this;
+        fetch('/api')
+            .then(result => result.json())
+            .then(data => that.setState({value: data.value, category: this.state.categories[1]}));
     }
-    componentWillMount() {
-        console.log("fap fap fap");
-        this.setState({category: this.state.categories[1]});
-    }
+
+    // componentWillMount() {   
+    //     this.setState({category: this.state.categories[1]});
+    // }
 
     
     addEntry() {
