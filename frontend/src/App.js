@@ -6,11 +6,11 @@ import {
   NavLink,
   Link
 } from 'react-router-dom'
-import {
-    Grid,
-    Col,
-    Row  
-} from 'react-bootstrap';
+// import {
+//     Grid,
+//     Col,
+//     Row  
+// } from 'react-bootstrap';
 
 import logo from './logo.svg';
 import './App.css';
@@ -23,15 +23,8 @@ const Home = () => (
   </span>
 )
 
-const About = () => (
-  <div>
-    <h2>About</h2>
-  </div>
-)
 
 class Topic2 extends Component {
-     
-
   render() { 
     return (
     <div>
@@ -42,11 +35,11 @@ class Topic2 extends Component {
   );}
 }
 
-const Topic = ({ match }) => (
-  <div>
-    <h3>{match.params.topicId}</h3>
-  </div>
-)
+// const Topic = ({ match }) => (
+//   <div>
+//     <h3>{match.params.topicId}</h3>
+//   </div>
+// )
 
 const Topics = ({ match }) => (
   <div>
@@ -78,9 +71,40 @@ const Topics = ({ match }) => (
 
 
 class App extends Component {
+   constructor(props) {
+        super(props);
+        this.state = {
+           value: 0,
+            description: '',
+            category: ''
+        };
+    }
+
+  addEntry(value) {
+    //alert(JSON.stringify(value));
+    this.setState(value);
+  };
+
   render() {
-    return (
-         
+
+    const RenderAddEntry = (props) => {
+      return (
+        <Buchung 
+          onAddEntry={this.addEntry.bind(this)} //shifting state up :)
+          />
+      );
+    }
+  
+    let showEntered = null;
+    if(this.state.value > 0) {
+      showEntered = <div>
+            <div>{this.state.value}</div>
+            <div>{this.state.description}</div>
+            <div>{this.state.category}</div>
+            </div>;
+    }
+
+    return (         
         <Router>
           <div className="App"> 
               <div className="navigationbar-wrapper">
@@ -91,9 +115,10 @@ class App extends Component {
                   <li><NavLink activeClassName="selected" to="/topics">Topics</NavLink></li>
                 </ul>
               </div>
+          {showEntered}
           <div className="mainContent">
             <Route exact path="/" component={Home}/>
-            <Route path="/addentry" component={Buchung}/>
+            <Route path="/addentry" render={RenderAddEntry}/>
             <Route path="/topics" component={Topics}/>
           </div>
         </div>

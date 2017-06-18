@@ -13,20 +13,31 @@ import {FormSelect} from '../components/controls.js'
 class Buchung extends React.Component {
     constructor(props) {
         super(props);
+        console.log("Ctor");
 
         this.state = {
             value: 0,
+            description: 'asd',
             categories: ['Haus und Hof', 'Einkauf', 'Freizeit']
         };
     }
 
     componentDidMount() {
+      //  this.setState({category: this.state.categories[1]});
+    }
+    componentWillMount() {
+        console.log("fap fap fap");
         this.setState({category: this.state.categories[1]});
     }
 
     
     addEntry() {
-      
+        var valueToAdd = {
+            value : this.state.value,
+            description : this.state.description,
+            category : this.state.category
+        };
+        this.props.onAddEntry(valueToAdd);
     }
 
     render() {
@@ -41,7 +52,9 @@ class Buchung extends React.Component {
                         <FormGroup controlId="formHorizontalValue">
                             <Col componentClass={ControlLabel} sm={3}>Betrag</Col>
                             <Col sm={9}>
-                                <FormControl type="text" placeholder="Betrag"/>
+                                <FormControl type="text" placeholder="Betrag"
+                                    value={this.state.value} 
+                                    onChange={ e=>this.setState({value: e.target.value})}/>
                             </Col>
                         </FormGroup>
 
@@ -52,6 +65,14 @@ class Buchung extends React.Component {
                                     values={categories}
                                     selected={this.state.category}
                                     onChange={x => this.setState({category: x})}/>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup controlId="formHorizontalDescription">
+                            <Col componentClass={ControlLabel} sm={3}>Beschreibung</Col>
+                            <Col sm={9}>
+                                <FormControl componentClass="textarea" placeholder="Beschreibung" 
+                                    value={this.state.description} 
+                                    onChange={ e=>this.setState({description: e.target.value})}/>
                             </Col>
                         </FormGroup>
 
