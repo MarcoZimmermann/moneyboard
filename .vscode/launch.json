@@ -3,12 +3,20 @@
     // Zeigen Sie auf vorhandene Attribute, um die zugehörigen Beschreibungen anzuzeigen.
     // Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [{
+    "configurations": [
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Attach to Process",
+            "processId": "${command:PickProcess}",
+            "port": 5858
+        },       
+        {
         "name": "Chrome",
         "type": "chrome",
         "request": "launch",
         "url": "http://localhost",
-        "webRoot": "${workspaceRoot}/src",
+        "webRoot": "${workspaceRoot}/frontend/src",
         "userDataDir": "${workspaceRoot}/.vscode/chrome",
         "sourceMapPathOverrides": {
           "webpack:///src/*": "${webRoot}/*"
