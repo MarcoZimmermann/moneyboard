@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Buchung from './buchung/buchung';
+import Overview from './buchung/overview';
 import {
   BrowserRouter as Router,
   Route,
@@ -15,13 +16,13 @@ import {
 import logo from './logo.svg';
 import './App.css';
 
-const Home = () => (
-  <span>
-  <div>
-    <h2>Home</h2>
-  </div>
-  </span>
-)
+// const Home = () => (
+//   <span>
+//   <div>
+//     <h2>Home</h2>
+//   </div>
+//   </span>
+// )
 
 
 class Topic2 extends Component {
@@ -95,14 +96,14 @@ class App extends Component {
       );
     }
   
-    let showEntered = null;
-    if(this.state.value > 0) {
-      showEntered = <div>
-            <div>{this.state.value}</div>
-            <div>{this.state.description}</div>
-            <div>{this.state.category}</div>
-            </div>;
-    }
+    // let showEntered = null;
+    // if(this.state.value > 0) {
+    //   showEntered = <div>
+    //         <div>{this.state.value}</div>
+    //         <div>{this.state.description}</div>
+    //         <div>{this.state.category}</div>
+    //         </div>;
+    // }
 
     return (         
         <Router>
@@ -114,10 +115,9 @@ class App extends Component {
                   <li><NavLink activeClassName="selected" to="/addentry">Buchen</NavLink></li>
                   <li><NavLink activeClassName="selected" to="/topics">Topics</NavLink></li>
                 </ul>
-              </div>
-          {showEntered}
+              </div>          
           <div className="mainContent">
-            <Route exact path="/" component={Home}/>
+            <Route exact path="/" component={Overview}/>
             <Route path="/addentry" render={RenderAddEntry}/>
             <Route path="/topics" component={Topics}/>
           </div>

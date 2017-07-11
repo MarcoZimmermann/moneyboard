@@ -29,12 +29,14 @@ class Buchung extends React.Component {
         const that = this;
         this
             .utils
-            .getData('/api')
+            .getData('/api/test')
             .then(data => that.setState({value: data.value, category: this.state.categories[1]}));
     }
 
 
     addEntry() {
+        var that = this;
+        
         var valueToAdd = {
             value: this.state.value,
             description: this.state.description,
@@ -44,7 +46,10 @@ class Buchung extends React.Component {
         this
             .utils
             .sendData('/api', valueToAdd)
-            .then(d => console.log(d));
+            .then(d => {
+                that.setState({LastState: "Ok"});
+                setTimeout(x=> this.setState({LastState: ""}), 2500);                
+            });
 
         this
             .props
@@ -53,6 +58,9 @@ class Buchung extends React.Component {
 
     render() {
         const categories = this.state.categories;
+        let LabelState = null;
+        if(this.state.LastState)
+            LabelState = <span>{this.state.LastState}</span>
 
         return (
             <Grid>
@@ -95,6 +103,7 @@ class Buchung extends React.Component {
                             </Col>
                         </FormGroup>
                     </Form>
+                    {LabelState}
                 </Col>
             </Grid>
 

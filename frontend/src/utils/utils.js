@@ -21,7 +21,7 @@ class Utils {
               body: JSON.stringify(dataToSend)
           })
           .then(resp=> {
-              if(resp.ok)
+              if(resp.ok && resp.status !== 204)
                   return resp.json();            
           });        
 
