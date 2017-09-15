@@ -6,7 +6,8 @@ import {
     Form,
     FormGroup,
     ControlLabel,
-    FormControl
+    FormControl,
+    InputGroup
 } from 'react-bootstrap';
 import {FormSelect} from '../components/controls.js'
 import Utils from '../utils/utils.js'
@@ -17,20 +18,22 @@ class Buchung extends React.Component {
         console.log("Ctor");
 
         this.state = {
-            value: 0,
-            description: 'asd',
-            categories: ['Haus und Hof', 'Einkauf', 'Freizeit']
+            value: 0.00,
+            description: '',
+            categories: ['Haus und Hof', 'Einkauf', 'Freizeit', 'Versicherung', 'Sonstiges']
         };
         this.utils = new Utils();
 
     }
 
     componentDidMount() {
-        const that = this;
-        this
-            .utils
-            .getData('/api/test')
-            .then(data => that.setState({value: data.value, category: this.state.categories[1]}));
+        // const that = this;
+        // this
+        //     .utils
+        //     .getData('/api/test')
+        //     .then(data => that.setState({value: data.value, category: this.state.categories[1]}));
+
+        this.setState({value: 0, category: this.state.categories[1]});
     }
 
 
@@ -69,11 +72,14 @@ class Buchung extends React.Component {
                         <FormGroup controlId="formHorizontalValue">
                             <Col componentClass={ControlLabel} sm={3}>Betrag</Col>
                             <Col sm={9}>
-                                <FormControl
-                                    type="text"
-                                    placeholder="Betrag"
-                                    value={this.state.value}
-                                    onChange={e => this.setState({value: e.target.value})}/>
+                                <InputGroup>
+                                    <FormControl
+                                        type="text"
+                                        placeholder="Betrag"
+                                        value={this.state.value}
+                                        onChange={e => this.setState({value: e.target.value})}/>
+                                        <InputGroup.Addon>€</InputGroup.Addon>
+                                </InputGroup>
                             </Col>
                         </FormGroup>
 

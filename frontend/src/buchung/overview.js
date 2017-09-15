@@ -15,12 +15,13 @@ class Overview extends React.Component {
 
   render() {
     return <div>
+      <b>Saldo: {this.state.totalAmount}</b>
       <ul> { 
         this.state.values.map((item, index) =>           
             {
               const desc = item.description ? (item.description.trim() + ": ") : ""
 
-              return <li key={index}>{desc} {item.value} {item.category}</li>
+              return <li key={index}>{item.entryDate} {desc} {item.value} {item.category}</li>
             })
         }
       </ul>            
@@ -33,7 +34,7 @@ class Overview extends React.Component {
       .utils
       .getData('/api/')
       .then(data => {
-        that.setState({values: data});
+        that.setState({values: data.items, totalAmount: data.amount});
 
         
         console.log(that.state, data);

@@ -1,18 +1,22 @@
 var express = require('express');
+var dataServiceModule = require('../lib/dataService');
+
+var dataService = new dataServiceModule();
 var router = express.Router();
-var items = [{value: 12.24, description : "Item1"}, {value: 39.99, description : "Item2"}, {value: 65, description : "Item3"}, {value: 160.11}];
+
 
 router.get('/', function(req, res, next) {
+  var items = dataService.loadEntries();
   res.json(items);
 })
 
-router.get('/test', function(req, res, next) {
-  res.json({value: 12.24});
-});
 
 router.post('/', function(req, res, next) {
-  console.log(req.body);
-  items.push(req.body);
+  var entry = req.body;
+  console.log(entry);
+
+  dataService.insertEntry(entry);
+  
   res.sendStatus(204);
 });
 
