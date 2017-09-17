@@ -15,6 +15,8 @@ import {
 
 import logo from './logo.svg';
 import './App.css';
+import moment from 'moment';
+import 'moment/locale/de';
 
 // const Home = () => (
 //   <span>
@@ -74,6 +76,9 @@ const Topics = ({ match }) => (
 class App extends Component {
    constructor(props) {
         super(props);
+
+        moment.locale('de');
+
         this.state = {
            value: 0,
             description: '',

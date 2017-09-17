@@ -22,19 +22,20 @@ function myModule() {
     var amount = 0;
     var entries = db
       .getAllData()
+      .sort((a,b) => b.entryDate-a.entryDate)
       .map(function (item) {
         amount +=  parseFloat(item.value);
         return {
             value : item.value,
             description: item.description, 
             category: item.category,
-            entryDate: item.entryDate ? item.entryDate.toLocaleDateString() : ""
+            entryDate: item.entryDate// ? item.entryDate.toLocaleDateString() : ""
         };  
       });
 
       var result = {
         items: entries,
-        amount: amount
+        amount: amount.toFixed(2)
       }
 
     return result;
@@ -42,7 +43,11 @@ function myModule() {
 }
 
 function validateEntry(entry) {
-  if (!entry.entryDate) 
+  if (!entry.entryDate) {
     entry.entryDate = new Date();
+  }
+
+  val = entry.value.replace(',','.');
+  entry.value = parseFloat(val).toFixed(2);
   }
 module.exports = myModule;

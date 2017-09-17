@@ -1,5 +1,6 @@
 import React from 'react';
 import Utils from '../utils/utils.js'
+import moment from 'moment'
 
 
 
@@ -10,18 +11,23 @@ class Overview extends React.Component {
     this.state = {
       values: []
     };
-
   }
 
   render() {
-    return <div>
+    return <div className="overview">      
       <b>Saldo: {this.state.totalAmount}</b>
       <ul> { 
         this.state.values.map((item, index) =>           
             {
-              const desc = item.description ? (item.description.trim() + ": ") : ""
+              const valueClass = item.value < 0 ? "debit" : "credit";                              
 
-              return <li key={index}>{item.entryDate} {desc} {item.value} {item.category}</li>
+              return <li key={index}>                
+                <div className="card" style={{width: "40em"}}>  
+                    <div className="date">{moment(item.entryDate).format('DD.MM.YY hh.mm.ss')}</div>              
+                    <div className="grow"> {item.description} </div>
+                    <div className={valueClass}>{item.value} €</div>
+                </div>
+              </li>
             })
         }
       </ul>            

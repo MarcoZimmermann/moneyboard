@@ -36,3 +36,49 @@
   background: #00b7f5;
 }
 
+.mainContent {
+  padding: 10px 20px;
+}
+
+.card {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+  box-shadow: #222;
+  margin: 10px 0px 0px 0px;
+  padding: 5px;
+}
+
+.card div:not(:first-child) {
+  padding-left: 0.5em;
+}
+
+.card div.grow {
+  flex-grow: 1;
+}
+
+.card .date {
+  max-width: 60px;
+}
+
+li {
+  list-style-type: none;
+}
+.debit {
+  color: red;
+  white-space: nowrap;
+}
+.credit {
+  color: green;
+  white-space: nowrap;
+}
+
