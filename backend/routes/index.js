@@ -10,6 +10,17 @@ router.get('/', function(req, res, next) {
   res.json(items);
 })
 
+router.get('/:id', function(req, res, next) {
+  console.log(JSON.stringify(req.params));
+  dataService.loadItem({"_id": req.params.id})
+    .then(function(items){
+      res.json(items);
+    })
+  
+})
+
+
+
 
 router.post('/', function(req, res, next) {
   var entry = req.body;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Buchung from './buchung/buchung';
 import Overview from './buchung/overview';
+import { withRouter } from 'react-router'
 import {
   BrowserRouter as Router,
   Route,
@@ -95,7 +96,7 @@ class App extends Component {
 
     const RenderAddEntry = (props) => {
       return (
-        <Buchung 
+        <Buchung location={props.location}        
           onAddEntry={this.addEntry.bind(this)} //shifting state up :)
           />
       );

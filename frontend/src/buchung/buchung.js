@@ -12,6 +12,7 @@ import {
 import {FormSelect} from '../components/controls.js'
 import Utils from '../utils/utils.js'
 
+
 class Buchung extends React.Component {
     constructor(props) {
         super(props);
@@ -26,14 +27,23 @@ class Buchung extends React.Component {
 
     }
 
-    componentDidMount() {
-        // const that = this;
-        // this
-        //     .utils
-        //     .getData('/api/test')
-        //     .then(data => that.setState({value: data.value, category: this.state.categories[1]}));
+    
 
-        this.setState({value: 0, category: this.state.categories[1]});
+    componentDidMount() {
+        var location = this.props.location.pathname.match(/addentry\/([^/]+$)/i);
+        if(location && location.length > 1) {
+            var id = location[location.length-1];
+
+            const that = this;
+            this
+                .utils
+                .getData('/api/test')
+                .then(data => that.setState({value: data.value, category: this.state.categories[1]}));
+
+        }
+        else { 
+            this.setState({value: 0, category: this.state.categories[1]});
+        }
     }
 
 

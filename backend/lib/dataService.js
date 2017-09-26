@@ -20,18 +20,11 @@ function myModule() {
 
   this.loadEntries = function () {
     var amount = 0;
-    var entries = db
-      .getAllData()
-      .sort((a,b) => b.entryDate-a.entryDate)
-      .map(function (item) {
-        amount +=  parseFloat(item.value);
-        return {
-            value : item.value,
-            description: item.description, 
-            category: item.category,
-            entryDate: item.entryDate// ? item.entryDate.toLocaleDateString() : ""
-        };  
-      });
+      
+      var entries = db
+        .getAllData()
+        .sort((a,b) => b.entryDate-a.entryDate)
+        .map(item=> transformItem(item, x=>amount+= parseFloat(x.value)));
 
       var result = {
         items: entries,
@@ -40,7 +33,39 @@ function myModule() {
 
     return result;
   }
+
+  this.loadItem = function(id) {
+    return new Promise(function(resolve, reject){
+      db.findOne({_id: id}, function(err, item) {
+        if(err) {
+           reject(err);
+        } else {
+          resolve(transformItem(item));
+        }
+
+      });
+    });    
+  }
+
 }
+
+function transformItem(item, cb) {
+  if(cb) {
+    cb(item);
+  }
+  if(!item) {
+    return item;
+  }
+
+  return {
+      id: item._id,
+      value : item.value,
+      description: item.description, 
+      category: item.category,
+      entryDate: item.entryDate// ? item.entryDate.toLocaleDateString() : ""
+  };  
+}
+
 
 function validateEntry(entry) {
   if (!entry.entryDate) {
