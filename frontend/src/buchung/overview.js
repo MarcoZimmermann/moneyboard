@@ -1,7 +1,6 @@
 import React from 'react';
 import Utils from '../utils/utils.js'
 import moment from 'moment'
-import { withRouter } from 'react-router'
 
 
 class Overview extends React.Component {

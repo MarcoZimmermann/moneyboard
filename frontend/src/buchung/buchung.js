@@ -12,7 +12,6 @@ import {
 import {FormSelect} from '../components/controls.js'
 import Utils from '../utils/utils.js'
 
-
 class Buchung extends React.Component {
     constructor(props) {
         super(props);
@@ -27,41 +26,56 @@ class Buchung extends React.Component {
 
     }
 
-    
-
     componentDidMount() {
         var location = this.props.location.pathname.match(/addentry\/([^/]+$)/i);
-        if(location && location.length > 1) {
-            var id = location[location.length-1];
+
+        if (location && location.length > 1) {
+            var id = location[location.length - 1];
 
             const that = this;
-            this
-                .utils
-                .getData('/api/test')
-                .then(data => that.setState({value: data.value, category: this.state.categories[1]}));
+            this.utils
+                .getData('/api/' + id)
+                .then(data => {
+                    if (data && data.value) {
+                        that.setState({ 
+                            id: data.id,
+                            entryDate: data.entryDate,
+                            value: data.value, 
+                            category: data.category,
+                            description: data.description
+                        })
+                    }
 
-        }
-        else { 
+                });
+
+        } else {
             this.setState({value: 0, category: this.state.categories[1]});
         }
     }
 
-
     addEntry() {
         var that = this;
-        
+
         var valueToAdd = {
+            id: this.state.id,
+            entryDate: this.state.entryDate,
             value: this.state.value,
             description: this.state.description,
             category: this.state.category
         };
 
+        var method = "POST";
+
+        if(valueToAdd.id) {
+            method = "PUT";
+        }
+
         this
             .utils
-            .sendData('/api', valueToAdd)
+            .sendData('/api', valueToAdd, method)
             .then(d => {
                 that.setState({LastState: "Ok"});
-                setTimeout(x=> this.setState({LastState: ""}), 2500);                
+                setTimeout(x => this.setState({LastState: ""}), 2500);
             });
 
         this
@@ -72,7 +86,7 @@ class Buchung extends React.Component {
     render() {
         const categories = this.state.categories;
         let LabelState = null;
-        if(this.state.LastState)
+        if (this.state.LastState) 
             LabelState = <span>{this.state.LastState}</span>
 
         return (
@@ -88,7 +102,7 @@ class Buchung extends React.Component {
                                         placeholder="Betrag"
                                         value={this.state.value}
                                         onChange={e => this.setState({value: e.target.value})}/>
-                                        <InputGroup.Addon>€</InputGroup.Addon>
+                                    <InputGroup.Addon>€</InputGroup.Addon>
                                 </InputGroup>
                             </Col>
                         </FormGroup>

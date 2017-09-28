@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Buchung from './buchung/buchung';
 import Overview from './buchung/overview';
+// eslint-disable-next-line 
 import { withRouter } from 'react-router'
 import {
   BrowserRouter as Router,
@@ -96,12 +97,13 @@ class App extends Component {
 
     const RenderAddEntry = (props) => {
       return (
-        <Buchung location={props.location}        
+        <Buchung 
+          location={props.location}        
           onAddEntry={this.addEntry.bind(this)} //shifting state up :)
           />
       );
     }
-  
+  //
     // let showEntered = null;
     // if(this.state.value > 0) {
     //   showEntered = <div>

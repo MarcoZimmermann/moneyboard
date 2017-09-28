@@ -12,10 +12,44 @@ var dataStore = require('nedb'),
 // };
 
 
+/**
+ * 
+ */
 function myModule() {
+  
+  /**
+   * @param  {} entry
+   */
   this.insertEntry = function (entry) {
+    if(!entry) 
+      return;
+
     validateEntry(entry);
-    db.insert(entry);
+    
+    db.insert(transformToDataItem(entry));
+  }
+
+  this.updateEntry = function (entry) {
+    if(!entry)
+      return;
+
+    validateEntry(entry, false);
+
+    var dataItem = transformToDataItem(entry);
+    
+    return new Promise(function(resolve, reject) {      
+      db.update({ _id: dataItem._id }, dataItem, function(err, numReplaced) {      
+        if(err) {
+            reject(err);
+        } else {
+          resolve(transformToModelItem(numReplaced));
+        }
+      });
+    });    
+
+
+
+    
   }
 
   this.loadEntries = function () {
@@ -24,7 +58,7 @@ function myModule() {
       var entries = db
         .getAllData()
         .sort((a,b) => b.entryDate-a.entryDate)
-        .map(item=> transformItem(item, x=>amount+= parseFloat(x.value)));
+        .map(item=> transformToModelItem(item, x=>amount+= parseFloat(x.value)));
 
       var result = {
         items: entries,
@@ -35,21 +69,22 @@ function myModule() {
   }
 
   this.loadItem = function(id) {
-    return new Promise(function(resolve, reject){
-      db.findOne({_id: id}, function(err, item) {
+    return new Promise(function(resolve, reject) {      
+      db.findOne({ _id : id}, function(err, item) {      
         if(err) {
-           reject(err);
+            reject(err);
         } else {
-          resolve(transformItem(item));
+          resolve(transformToModelItem(item));
         }
-
       });
     });    
   }
 
 }
 
-function transformItem(item, cb) {
+
+/* Helper */
+function transformToModelItem(item, cb) {
   if(cb) {
     cb(item);
   }
@@ -67,8 +102,23 @@ function transformItem(item, cb) {
 }
 
 
-function validateEntry(entry) {
-  if (!entry.entryDate) {
+function transformToDataItem(item) {
+  if(!item) {
+    return item;
+  }
+
+  return {
+      _id: item.id,
+      value : item.value,
+      description: item.description, 
+      category: item.category,
+      entryDate: item.entryDate// ? item.entryDate.toLocaleDateString() : ""
+  };  
+}
+
+
+function validateEntry(entry, setEntryDate) {
+  if (setEntryDate && !entry.entryDate) {
     entry.entryDate = new Date();
   }
 
