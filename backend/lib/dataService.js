@@ -3,22 +3,14 @@ var dataStore = require('nedb'),
   db = new dataStore({filename: constans.pathToDb, autoload: true});
 
 
-
-// var entry = {
-//   value : 0,
-//   description: '', 
-//   category: '',
-//   entryDate: new Date()
-// };
-
-
 /**
- * 
+ * Datenservice, der sich um das Laden und speichern in der DB kümmert
  */
-function myModule() {
+function DataServiceModule() {
   
   /**
-   * @param  {} entry
+   * Fügt einen Neuen Datensatz hinzu
+   * @param {Object} entry - Fügt ein Eintrag der DB hinzu
    */
   this.insertEntry = function (entry) {
     if(!entry) 
@@ -29,6 +21,12 @@ function myModule() {
     db.insert(transformToDataItem(entry));
   }
 
+
+  
+  /**
+   * Aktualisiert einen bestehenden Eintrag 
+   * @param  {Object} entry - Zu aktualisierender Eintrag
+   */
   this.updateEntry = function (entry) {
     if(!entry)
       return;
@@ -46,12 +44,11 @@ function myModule() {
         }
       });
     });    
-
-
-
-    
   }
 
+  /**
+   * Gibt alle in der DB vorhanden Items zurück
+   */
   this.loadEntries = function () {
     var amount = 0;
       
@@ -68,6 +65,11 @@ function myModule() {
     return result;
   }
 
+  
+  /**
+   * Lädt ein Eintrag mit einer bestimmten ID aus der DB
+   * @param  {string} id - Identifier des zu ladenen Eintrags
+   */
   this.loadItem = function(id) {
     return new Promise(function(resolve, reject) {      
       db.findOne({ _id : id}, function(err, item) {      
@@ -125,4 +127,4 @@ function validateEntry(entry, setEntryDate) {
   val = entry.value.replace(',','.');
   entry.value = parseFloat(val).toFixed(2);
   }
-module.exports = myModule;
+module.exports = DataServiceModule;
