@@ -6,8 +6,19 @@ var router = express.Router();
 
 
 router.get('/', function(req, res, next) {
-  var items = dataService.loadEntries();
-  res.json(items);
+  var queryFilter = {};
+  if(req.query.startDate) {
+    queryFilter.start = new Date(req.query.startDate);
+    queryFilter.start.setUTCHours(0);
+  }
+  if(req.query.endDate) {
+    queryFilter.end = new Date(req.query.endDate);
+    queryFilter.end.setUTCHours(23,59);
+  }
+
+  var items = dataService.loadEntries(queryFilter).then(function(items){
+    res.json(items);
+  });
 })
 
 router.get('/:id', function(req, res, next) {

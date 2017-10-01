@@ -1,0 +1,11 @@
+.overviewFilter .form-group label {
+  padding-right: 10px;  
+}
+
+.overviewFilter .form-group:not(:first-child) {
+  margin-left : 10px;
+}
+
+.overviewFilter { 
+  margin-bottom: 5px;
+}

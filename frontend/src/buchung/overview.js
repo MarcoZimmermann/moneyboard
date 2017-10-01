@@ -1,55 +1,78 @@
 import React from 'react';
 import Utils from '../utils/utils.js'
+import DateFilter from '../components/datefilter.js'
 import moment from 'moment'
-
 
 class Overview extends React.Component {
   constructor() {
     super();
     this.utils = new Utils();
     this.state = {
-      values: []
+      values: [],
+      startDate: moment().subtract(14, 'days'),
+      endDate: moment()
     };
   }
-  editEntry(history, item) {
-    history.push('/addentry/'+item.id);
 
+  componentDidMount() {
+    this.loadData();
+  }
+
+  loadData() {
+    const that = this;    
+    var url='/api?startDate='+encodeURIComponent(this.state.startDate);
+    this
+      .utils
+      .getData(url)
+      .then(data => {
+        that.setState({values: data.items, totalAmount: data.amount});        
+      });
+  }
+  
+
+  editEntry(history, item) {
+    history.push('/addentry/' + item.id);
   }
 
   render() {
     const history = this.props.history;
-    
-    return <div className="overview">            
-      <b>Saldo: {this.state.totalAmount}</b>
-      <ul> { 
-        this.state.values.map((item, index) =>           
-            {
-              const valueClass = item.value < 0 ? "debit" : "credit";                              
 
-              return <li key={index}>   
-                <div className="card" style={{width: "40em"}} onClick={e => this.editEntry(history, item)}>  
-                    <div className="date">{moment(item.entryDate).format('DD.MM.YY hh.mm.ss')}</div>              
-                    <div className="grow"> {item.description} </div>
-                    <div className={valueClass}>{item.value} €</div>
-                </div>
-              </li>
-            })
+    return <div>
+      <DateFilter       
+        startDate = { this.state.startDate }
+        onStartChanged = { v=> {
+          this.setState({startDate: moment(v) });
+          this.loadData();
+          }
         }
-      </ul>            
+
+        endDate = { this.state.endDate }
+        onEndChanged = { v=> this.setState({endDate: moment(v) })}
+      />
+      <b>Saldo: {this.state.totalAmount}</b>
+
+      <ul>
+        {
+          this.state.values.map((item, index) => {
+            const valueClass = item.value < 0 ? "debit" : "credit";
+
+            return <li key={index}>
+              <div
+                className="card"
+                style={{ width: "40em"}}
+                onClick={e => this.editEntry(history, item)}>
+                <div className="date">{moment(item.entryDate).format('DD.MM.YY hh.mm.ss')}</div>
+                <div className="grow">{item.description}</div>
+                <div className={valueClass}>{item.value}€</div>
+              </div>
+            </li>
+          })
+        }
+      </ul>
     </div>;
   }
 
-  componentDidMount() {
-    const that = this;
-    console.dir(this.props);
-    this
-      .utils
-      .getData('/api/')
-      .then(data => {
-        that.setState({values: data.items, totalAmount: data.amount});
-        console.log(that.state, data);
-      });
-  }
+  
 }
 
 export default Overview;

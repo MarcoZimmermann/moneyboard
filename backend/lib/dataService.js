@@ -49,20 +49,53 @@ function DataServiceModule() {
   /**
    * Gibt alle in der DB vorhanden Items zurück
    */
-  this.loadEntries = function () {
-    var amount = 0;
+  // this.loadEntries = function () {
+  //   var amount = 0;
       
-      var entries = db
-        .getAllData()
-        .sort((a,b) => b.entryDate-a.entryDate)
-        .map(item=> transformToModelItem(item, x=>amount+= parseFloat(x.value)));
+  //     var entries = db
+  //       .getAllData()
+  //       .sort((a,b) => b.entryDate-a.entryDate)
+  //       .map(item=> transformToModelItem(item, x=>amount+= parseFloat(x.value)));
 
-      var result = {
-        items: entries,
-        amount: amount.toFixed(2)
-      }
+  //     var result = {
+  //       items: entries,
+  //       amount: amount.toFixed(2)
+  //     }
 
-    return result;
+  //   return result;
+  // }
+
+  this.loadEntries = function (filter) {
+    var amount = 0;
+
+    var queries = [];
+    
+    if(filter.start) {
+      queries.push({ entryDate: { $gte: filter.start }});
+    }
+    if(filter.end) {
+      queries.push({ entryDate: { $lte: filter.end }});
+    }
+
+    var query = { $and: queries };
+    return new Promise(function(resolve, reject) { 
+
+      db.find(query, function(err, items) {      
+        if(err) {
+            reject(err);
+        } else {
+
+          var transformesItems = items.sort((a,b) => b.entryDate-a.entryDate)
+          .map(item=> transformToModelItem(item, x=>amount+= parseFloat(x.value)));
+
+          var result = {
+                  items: transformesItems,
+                  amount: amount.toFixed(2)
+                }
+          resolve(result);
+        }
+      });
+    });    
   }
 
   
