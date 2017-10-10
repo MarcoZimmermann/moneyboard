@@ -15,12 +15,24 @@ class Overview extends React.Component {
   }
 
   componentDidMount() {
-    this.loadData();
+    this.loadData(this.state.startDate);
   }
 
-  loadData() {
+  loadData(startDate, endDate) {
     const that = this;    
-    var url='/api?startDate='+encodeURIComponent(this.state.startDate);
+    
+    var param ="";
+    if(startDate)
+      param = 'startDate='+encodeURIComponent(startDate.format('YYYY-MM-DD'));
+
+    if(endDate) {
+      if(param.length>0)
+        param+="&";
+
+      param+='endDate='+encodeURIComponent(endDate.format('YYYY-MM-DD'));
+    }
+
+    var url='/api' + (param.length > 0 ? '?'+param : "");
     this
       .utils
       .getData(url)
@@ -41,13 +53,19 @@ class Overview extends React.Component {
       <DateFilter       
         startDate = { this.state.startDate }
         onStartChanged = { v=> {
-          this.setState({startDate: moment(v) });
-          this.loadData();
+          var newStartDate = moment(v);
+          this.setState({startDate: newStartDate });
+          this.loadData(newStartDate);
           }
         }
 
         endDate = { this.state.endDate }
-        onEndChanged = { v=> this.setState({endDate: moment(v) })}
+        onEndChanged = { v=> {
+          var newEndDate = moment(v);
+          this.setState({endDate: newEndDate });
+          this.loadData(this.state.startDate, newEndDate);
+          }          
+        }
       />
       <b>Saldo: {this.state.totalAmount}</b>
 

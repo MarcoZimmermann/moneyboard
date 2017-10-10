@@ -9,11 +9,11 @@ router.get('/', function(req, res, next) {
   var queryFilter = {};
   if(req.query.startDate) {
     queryFilter.start = new Date(req.query.startDate);
-    queryFilter.start.setUTCHours(0);
+    queryFilter.start.setUTCHours(0,0,0,0);    
   }
   if(req.query.endDate) {
     queryFilter.end = new Date(req.query.endDate);
-    queryFilter.end.setUTCHours(23,59);
+    queryFilter.end.setUTCHours(23,59,59);
   }
 
   var items = dataService.loadEntries(queryFilter).then(function(items){

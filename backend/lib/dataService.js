@@ -16,7 +16,7 @@ function DataServiceModule() {
     if(!entry) 
       return;
 
-    validateEntry(entry);
+    validateEntry(entry, true);
     
     db.insert(transformToDataItem(entry));
   }
@@ -76,11 +76,10 @@ function DataServiceModule() {
     if(filter.end) {
       queries.push({ entryDate: { $lte: filter.end }});
     }
-
+ 
     var query = { $and: queries };
     return new Promise(function(resolve, reject) { 
-
-      db.find(query, function(err, items) {      
+        db.find(query , function(err, items) {   
         if(err) {
             reject(err);
         } else {
@@ -118,7 +117,7 @@ function DataServiceModule() {
 }
 
 
-/* Helper */
+//#region Helper
 function transformToModelItem(item, cb) {
   if(cb) {
     cb(item);
@@ -142,13 +141,15 @@ function transformToDataItem(item) {
     return item;
   }
 
-  return {
+
+  var item =  {
       _id: item.id,
       value : item.value,
       description: item.description, 
       category: item.category,
       entryDate: item.entryDate// ? item.entryDate.toLocaleDateString() : ""
   };  
+  return item;
 }
 
 
@@ -158,6 +159,10 @@ function validateEntry(entry, setEntryDate) {
   }
 
   val = entry.value.replace(',','.');
-  entry.value = parseFloat(val).toFixed(2);
-  }
+  entry.value = Number(parseFloat(val).toFixed(2));
+}
+
+//#endregion Helper
+
+
 module.exports = DataServiceModule;
