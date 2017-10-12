@@ -27,10 +27,13 @@ class Buchung extends React.Component {
     }
 
     componentDidMount() {
-        var location = this.props.location.pathname.match(/addentry\/([^/]+$)/i);
-
-        if (location && location.length > 1) {
-            var id = location[location.length - 1];
+        var locationMatch = this.props.location.pathname.match(/addentry\/([^/]+$)/i);
+        const hasItemId = locationMatch && locationMatch.length > 1;
+        if (!hasItemId) {
+            // leeres Formular laden
+            this.setState({value: 0, category: this.state.categories[1]});
+        } else {
+            var id = locationMatch[locationMatch.length - 1];
 
             const that = this;
             this.utils
@@ -48,8 +51,6 @@ class Buchung extends React.Component {
 
                 });
 
-        } else {
-            this.setState({value: 0, category: this.state.categories[1]});
         }
     }
 
