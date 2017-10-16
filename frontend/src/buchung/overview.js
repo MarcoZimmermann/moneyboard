@@ -2,6 +2,7 @@ import React from 'react';
 import Utils from '../utils/utils.js'
 import DateFilter from '../components/datefilter.js'
 import moment from 'moment'
+import { Grid, Col, Glyphicon } from 'react-bootstrap';
 
 class Overview extends React.Component {
   constructor() {
@@ -9,7 +10,7 @@ class Overview extends React.Component {
     this.utils = new Utils();
     this.state = {
       values: [],
-      startDate: moment().subtract(14, 'days'),
+      startDate: moment().subtract(1, 'months'),
       endDate: moment()
     };
   }
@@ -46,6 +47,11 @@ class Overview extends React.Component {
     history.push('/addentry/' + item.id);
   }
 
+  deleteEntry(item) {
+    alert(item.id);
+
+  }
+
   render() {
     const history = this.props.history;
 
@@ -69,28 +75,48 @@ class Overview extends React.Component {
       />
       <b>Saldo: {this.state.totalAmount}</b>
 
+      <Grid fluid={true} className="overviewGrid">  
+        <Col md={6}>
+        <div className="overviewGrid">
       <ul>
         {
           this.state.values.map((item, index) => {
-            const valueClass = item.value < 0 ? "debit" : "credit";
-
-            return <li key={index}>
-              <div
-                className="card"
-                style={{ width: "40em"}}
-                onClick={e => this.editEntry(history, item)}>
-                <div className="date">{moment(item.entryDate).format('DD.MM.YY hh.mm.ss')}</div>
-                <div className="grow">{item.description}</div>
-                <div className={valueClass}>{item.value}€</div>
-              </div>
-            </li>
+            return <ListItem key={index}                    
+                      editEntry={x => this.editEntry(history, x) }
+                      deleteEntry={x=> this.deleteEntry(x)}                       
+                      item={item}/>           
           })
         }
       </ul>
-    </div>;
+      </div>
+      </Col>
+      </Grid>
+    </div>
   }
+}
 
-  
+class ListItem extends React.Component {  
+  render() {
+    const item = this.props.item;
+    const valueClass = item.value < 0 ? "debit" : "credit";
+    
+    return (
+      <li>            
+        <div
+          className="card">
+          <div className="date">{moment(item.entryDate).format('DD.MM.YY HH.mm.ss')}</div>
+          <div className="grow">{item.description}</div>
+          <div className={valueClass}>{item.value}€</div>              
+          <div className ="iconPane">                  
+            {/* <Button onClick={e=> {e.stopPropagation(); this.props.click()}}><Glyphicon glyph="pencil" /></Button>
+            <Button onClick={e=> {e.stopPropagation(); this.props.click()}}><Glyphicon glyph="remove" /></Button> */}
+            <Glyphicon glyph="pencil"  onClick={e=> {e.stopPropagation(); this.props.editEntry(item)}}> </Glyphicon>
+            <Glyphicon glyph="remove"  onClick={e=> {e.stopPropagation(); this.props.deleteEntry(item)}}> </Glyphicon>
+          </div>
+        </div>
+      </li>
+    )
+  }
 }
 
 export default Overview;

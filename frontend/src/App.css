@@ -70,6 +70,17 @@
   max-width: 60px;
 }
 
+.card .iconPane {
+  display: flex;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  flex-direction: column;
+  -webkit-box-orient: horizontal;  
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+}
+
 li {
   list-style-type: none;
 }
@@ -82,3 +93,7 @@ li {
   white-space: nowrap;
 }
 
+.overviewGrid ul {
+  padding-left: 0px;
+}
+ 
