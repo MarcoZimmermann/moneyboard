@@ -47,9 +47,12 @@ class Overview extends React.Component {
     history.push('/addentry/' + item.id);
   }
 
-  deleteEntry(item) {
-    alert(item.id);
-
+  deleteEntry(item) {    
+    this.utils.sendData('/api/'+item.id, null, 'delete').then(x=> {
+      console.log("ASdf")
+      this.loadData(this.state.startDate);
+    }, x=> console.log("kaputt"));
+    
   }
 
   render() {

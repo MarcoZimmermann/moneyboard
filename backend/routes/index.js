@@ -26,8 +26,7 @@ router.get('/:id', function(req, res, next) {
   dataService.loadItem(req.params.id)
     .then(function(items){
       res.json(items);
-    })
-  
+    })  
 })
 
 
@@ -47,6 +46,16 @@ router.post('/', function(req, res, next) {
   dataService.insertEntry(entry);
   
   res.sendStatus(204);
+});
+
+
+router.delete('/:id', function(req, res, next) {
+  console.log(JSON.stringify(req.params));  
+  dataService.removeItem(req.params.id)
+    .then(function(itemsRemoved){
+      console.log("Items removed: ", itemsRemoved);
+      res.sendStatus(204);
+    })  
 });
 
 module.exports = router;

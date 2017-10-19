@@ -112,7 +112,28 @@ function DataServiceModule() {
     });
   }
 
+  
+  /**
+   * Löscht einen Eintrag aus der DB
+   * @param  {string} itemId - ID des zu löschenden Items
+   */
+  this.removeItem = function(itemId) {
+    return new Promise(function (resolve, reject) {
+      db
+        .remove({ _id: itemId }, function (err, numRemoved) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(numRemoved);
+          }
+        });
+    });
+  }
+
+
 }
+
+
 
 //#region Helper
 function transformToModel(item) {  

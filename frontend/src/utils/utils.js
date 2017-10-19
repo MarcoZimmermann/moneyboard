@@ -18,11 +18,15 @@ class Utils {
               headers: {              
                   'Content-Type': 'application/json'
               },
-              body: JSON.stringify(dataToSend)
+              body: dataToSend ? JSON.stringify(dataToSend) : undefined
           })
           .then(resp=> {
               if(resp.ok && resp.status !== 204)
-                  return resp.json();            
+                  return resp.json(); 
+              else if(!resp.ok || resp.status === 500) {
+                //throw "Request failed";
+                return Promise.reject("Request failed");
+              }           
           });        
 
   }
