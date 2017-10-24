@@ -1,9 +1,16 @@
 var express = require('express');
+var jwt = require('jsonwebtoken');
+
 var dataServiceModule = require('../lib/dataService');
 
 var dataService = new dataServiceModule();
 var router = express.Router();
 
+router.get('/login', function(req, res, next) {
+  // TODO: replace dummy
+  var myToken = jwt.sign({ userName: 'wes', info: 'asdf'}, "LaLeLu", { expiresIn: '10s' } );
+  res.json(myToken);
+})
 
 router.get('/', function(req, res, next) {
   var queryFilter = {};

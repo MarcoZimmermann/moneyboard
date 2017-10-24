@@ -3,9 +3,9 @@ class Utils {
     console.log("Woop");
   }
 
-  getData(url) {
-   // var promise = fetch(url);
-    return fetch(url).then(result => result.json());
+  getData(url) {   
+   // return fetch(url).then(result => result.json());
+    return this.sendData(url, null, 'GET');
     
   }
 
@@ -16,7 +16,8 @@ class Utils {
     return fetch(url, {
               method: verb,
               headers: {              
-                  'Content-Type': 'application/json'
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer '+localStorage.getItem('token')
               },
               body: dataToSend ? JSON.stringify(dataToSend) : undefined
           })
