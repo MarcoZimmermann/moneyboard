@@ -16,7 +16,7 @@ class Overview extends React.Component {
   }
 
   componentDidMount() {
-    localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IndlcyIsImluZm8iOiJhc2RmIiwiaWF0IjoxNTA4ODc4NTk5LCJleHAiOjE1MDg4ODIxOTl9.BxFSnHZOUUW1Ygl0-QswGnDP339aTXpjT_Jop_aEfa8");
+    //localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IndlcyIsImluZm8iOiJhc2RmIn0.KAogTiKjfccBFxrQYI3ttAU8yhU4kXUf22zkynMsQXc");
    
     this.loadData(this.state.startDate);
   }

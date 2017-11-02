@@ -6,10 +6,17 @@ var dataServiceModule = require('../lib/dataService');
 var dataService = new dataServiceModule();
 var router = express.Router();
 
-router.get('/login', function(req, res, next) {
-  // TODO: replace dummy
-  var myToken = jwt.sign({ userName: 'wes', info: 'asdf'}, "LaLeLu", { expiresIn: '10s' } );
-  res.json(myToken);
+router.post('/token', function(req, res, next) {
+  var entry = req.body;
+    // TODO: replace dummy
+  if(entry.user === 'Wesley' && entry.pw ==="fapfapfap") {
+    var myToken = jwt.sign({ userName: entry.user, info: 'asdf'}, "LaLeLu", { expiresIn: '10m' } );
+    res.json(myToken);
+    
+  }
+  else {  
+    return res.sendStatus(401);
+  }
 })
 
 router.get('/', function(req, res, next) {

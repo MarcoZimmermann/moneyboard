@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Buchung from './buchung/buchung';
 import Overview from './buchung/overview';
+import UserLogin from './credentials/login'
 // eslint-disable-next-line 
 import { withRouter } from 'react-router'
 import {
@@ -20,23 +21,11 @@ import './App.css';
 import moment from 'moment';
 import 'moment/locale/de';
 
-// const Home = () => (
-//   <span>
-//   <div>
-//     <h2>Home</h2>
-//   </div>
-//   </span>
-// )
-
 
 class Topic2 extends Component {
   render() { 
     return (
-    <div>
-    <h3>{
-      this.props.match.params.topicId
-      }</h3>
-  </div>
+    <div><h3>{this.props.match.params.topicId}</h3></div>
   );}
 }
 
@@ -122,12 +111,14 @@ class App extends Component {
                   <li><NavLink exact activeClassName="selected" to="/">Home</NavLink></li>
                   <li><NavLink activeClassName="selected" to="/addentry">Buchen</NavLink></li>
                   <li><NavLink activeClassName="selected" to="/topics">Topics</NavLink></li>
+                  <li><NavLink activeClassName="selected" to="/login">LogIn</NavLink></li>
                 </ul>
               </div>          
           <div className="mainContent">
             <Route exact path="/" component={Overview}/>
             <Route path="/addentry" render={RenderAddEntry}/>
             <Route path="/topics" component={Topics}/>
+            <Route path="/login" component={UserLogin}/>
           </div>
         </div>
       </Router>    
