@@ -1,6 +1,6 @@
 var constans = require('../constants');
 var dataStore = require('nedb'),
-  db = new dataStore({filename: constans.pathToDb, autoload: true});
+  db = new dataStore({filename: constans.entriesDb, autoload: true});
 
 /**
  * Datenservice, der sich um das Laden und speichern in der DB kümmert
@@ -14,9 +14,7 @@ function DataServiceModule() {
   this.insertEntry = function (entry) {
     if (!entry) 
       return;
-    
    
-
     db.insert(transformToDataItem(entry));
   }
 
