@@ -1,22 +1,18 @@
 var express = require('express');
 var jwt = require('jsonwebtoken');
 
-var dataServiceModule = require('../lib/dataService');
+var services = require('../lib/services');
+var dataService = services.createDataService();
+var userService = services.createUserService();
 
-var dataService = new dataServiceModule();
 var router = express.Router();
 
 router.post('/token', function(req, res, next) {
   var entry = req.body;
-    // TODO: replace dummy
-  if(entry.user === 'Wesley' && entry.pw ==="fapfapfap") {
-    var myToken = jwt.sign({ userName: entry.user, info: 'asdf'}, "LaLeLu", { expiresIn: '10m' } );
-    res.json(myToken);
     
-  }
-  else {  
-    return res.sendStatus(401);
-  }
+  tryLoadUserToken(entry.user, entry.pw)
+    .then(x => res.json(x), () => res.sendStatus(401));
+  
 })
 
 router.get('/', function(req, res, next) {
@@ -71,5 +67,29 @@ router.delete('/:id', function(req, res, next) {
       res.sendStatus(204);
     })  
 });
+
+function tryLoadUserToken(userName, userPw) {
+  return new Promise(function (resolve, reject) {
+    if(!userName || !userPw)
+      reject();
+    else{
+      userService.getUser(userName,userPw).then(data => {
+          if(data.name === userName) {
+            var myToken = jwt.sign({ userName: data.name, info: 'asdf'}, "LaLeLu", { expiresIn: '10m' } );
+            resolve(myToken);
+            return;
+          }
+          reject();
+        },
+        reason=> reject(reason));
+    }    
+  });
+
+  
+
+    
+
+  
+}
 
 module.exports = router;
