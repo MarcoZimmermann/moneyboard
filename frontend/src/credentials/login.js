@@ -27,6 +27,12 @@ export class UserLogin extends React.Component {
         });
     }
 
+    handleKeyPress(event) {
+        if(event.key === 'Enter' || event.key === 'Return') {
+            this.signIn();
+        }
+    }
+
     render() {
         return (
             <Grid>
@@ -38,6 +44,7 @@ export class UserLogin extends React.Component {
                                 type="text"
                                 value={this.state.userName}                                
                                 onChange={e => this.setState({ userName: e.target.value })}
+                                onKeyPress={e=> this.handleKeyPress(e)}
                             />                            
                         </FormGroup>
                         <FormGroup controlId="formPassword">
@@ -46,6 +53,7 @@ export class UserLogin extends React.Component {
                                 type="password"
                                 value={this.state.passWord}
                                 onChange={e => this.setState({ passWord: e.target.value })}
+                                onKeyPress={e=> this.handleKeyPress(e)}
                             />                            
                               
                         </FormGroup>
