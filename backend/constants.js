@@ -1,4 +1,5 @@
 module.exports = Object.freeze({
-  pathToDb : 'data/entries.db'
+  entriesDb : 'data/entries.db',
+  userDb: 'data/users.db'
 });
 

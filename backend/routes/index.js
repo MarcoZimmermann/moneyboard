@@ -1,9 +1,19 @@
 var express = require('express');
-var dataServiceModule = require('../lib/dataService');
+var jwt = require('jsonwebtoken');
 
-var dataService = new dataServiceModule();
+var services = require('../lib/services');
+var dataService = services.createDataService();
+var userService = services.createUserService();
+
 var router = express.Router();
 
+router.post('/token', function(req, res, next) {
+  var entry = req.body;
+    
+  tryLoadUserToken(entry.user, entry.pw)
+    .then(x => res.json(x), () => res.sendStatus(401));
+  
+})
 
 router.get('/', function(req, res, next) {
   var queryFilter = {};
@@ -26,8 +36,7 @@ router.get('/:id', function(req, res, next) {
   dataService.loadItem(req.params.id)
     .then(function(items){
       res.json(items);
-    })
-  
+    })  
 })
 
 
@@ -48,5 +57,39 @@ router.post('/', function(req, res, next) {
   
   res.sendStatus(204);
 });
+
+
+router.delete('/:id', function(req, res, next) {
+  console.log(JSON.stringify(req.params));  
+  dataService.removeItem(req.params.id)
+    .then(function(itemsRemoved){
+      console.log("Items removed: ", itemsRemoved);
+      res.sendStatus(204);
+    })  
+});
+
+function tryLoadUserToken(userName, userPw) {
+  return new Promise(function (resolve, reject) {
+    if(!userName || !userPw)
+      reject();
+    else{
+      userService.getUser(userName,userPw).then(data => {
+          if(data.name === userName) {
+            var myToken = jwt.sign({ userName: data.name, info: 'asdf'}, "LaLeLu", { expiresIn: '10m' } );
+            resolve(myToken);
+            return;
+          }
+          reject();
+        },
+        reason=> reject(reason));
+    }    
+  });
+
+  
+
+    
+
+  
+}
 
 module.exports = router;

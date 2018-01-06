@@ -97,3 +97,8 @@ li {
   padding-left: 0px;
 }
  
+.loginForm {
+  padding: 20px;
+  border: 1px solid #d8dee2;
+  border-radius: 5px;
+}

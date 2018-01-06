@@ -1,6 +1,6 @@
 var constans = require('../constants');
 var dataStore = require('nedb'),
-  db = new dataStore({filename: constans.pathToDb, autoload: true});
+  db = new dataStore({filename: constans.entriesDb, autoload: true});
 
 /**
  * Datenservice, der sich um das Laden und speichern in der DB kümmert
@@ -14,9 +14,7 @@ function DataServiceModule() {
   this.insertEntry = function (entry) {
     if (!entry) 
       return;
-    
    
-
     db.insert(transformToDataItem(entry));
   }
 
@@ -112,7 +110,28 @@ function DataServiceModule() {
     });
   }
 
+  
+  /**
+   * Löscht einen Eintrag aus der DB
+   * @param  {string} itemId - ID des zu löschenden Items
+   */
+  this.removeItem = function(itemId) {
+    return new Promise(function (resolve, reject) {
+      db
+        .remove({ _id: itemId }, function (err, numRemoved) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(numRemoved);
+          }
+        });
+    });
+  }
+
+
 }
+
+
 
 //#region Helper
 function transformToModel(item) {  

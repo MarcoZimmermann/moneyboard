@@ -16,6 +16,8 @@ class Overview extends React.Component {
   }
 
   componentDidMount() {
+    //localStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IndlcyIsImluZm8iOiJhc2RmIn0.KAogTiKjfccBFxrQYI3ttAU8yhU4kXUf22zkynMsQXc");
+   
     this.loadData(this.state.startDate);
   }
 
@@ -47,9 +49,12 @@ class Overview extends React.Component {
     history.push('/addentry/' + item.id);
   }
 
-  deleteEntry(item) {
-    alert(item.id);
-
+  deleteEntry(item) {    
+    this.utils.sendData('/api/'+item.id, null, 'delete').then(x=> {
+      console.log("ASdf")
+      this.loadData(this.state.startDate);
+    }, x=> console.log("kaputt"));
+    
   }
 
   render() {
