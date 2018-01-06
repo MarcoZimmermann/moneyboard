@@ -1,2 +1,14 @@
-#nginx Reverse proxy
-sudo docker run --name moneyBoardWeb -d -v ~/dev/moneyboard/settings/nginx.conf:/etc/nginx/nginx.conf -p 80:80 nginx
+d build -t mylb ./reverseproxy/
+d build -t myapi ./backend/
+d build -t myfrontend ./frontend/
+
+d network create mb
+d run --network mb -d --name api myapi 
+d run --network mb -d --name frontend myfrontend
+d run --network mb -d --name lb -p 80:80 mylb
+
+
+d stack deploy --compose-file moneyboard.yml mb
+
+
+

@@ -1,0 +1,36 @@
+ 
+version: "3"
+services:
+  reverseproxy:
+    image: mylb
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+      - 80:80    
+    networks:
+      - moneyboard
+  api:
+    image: myapi
+    volumes:
+      - /home/wesley/moneyboard/data:/var/www/api/data
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+     
+    networks:
+      - moneyboard
+  frontend:
+    image: myfrontend
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure   
+    networks:
+      - moneyboard
+ 
+ 
+networks:
+  moneyboard:

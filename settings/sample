@@ -1,0 +1,83 @@
+# oktopus-app.yml
+ 
+version: "3"
+services:
+  lb:
+    image: nginx
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - oktopus
+  api:
+    image: my-api
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - "/srv/data/mydatabase:/srv/data/mydatabase"
+    networks:
+      - oktopus
+  frontend:
+    image: my-frontend
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - oktopus
+ 
+ 
+networks:
+  oktopus:
+ 
+ 
+#Deploy
+=> https://docs.docker.com/engine/swarm/stack-deploy/
+docker stack deploy --compose-file oktopus-app.yml OktopusApp
+ 
+ 
+ 
+####### Nginx Config
+ 
+ 
+ 
+# Force SSL
+server {
+    listen      80;
+    server_name mydomain.com;
+    return 301 https://$host$request_uri;
+}
+ 
+server {
+    listen 443 ssl;
+    server_name mydomain.com;
+ 
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+ 
+    location /api {
+        # => https://stackoverflow.com/a/44303568
+        set $api_addr api:8888;
+        proxy_pass http://$api_addr;
+ 
+    }
+ 
+    location / {
+        # => https://stackoverflow.com/a/44303568
+        set $frontend_addr frontend:80;
+        proxy_pass http://$frontend_addr;
+    }
+ 
+ 
+ 
+ 
+ 
+}
