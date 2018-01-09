@@ -3,7 +3,7 @@ d build -t myapi ./backend/
 d build -t myfrontend ./frontend/
 
 d network create mb
-d run --network mb -d --name api myapi 
+d run --network mb -d --name api -v /home/wesley/moneyboard/data:/var/www/api/data myapi 
 d run --network mb -d --name frontend myfrontend
 d run --network mb -d --name lb -p 80:80 mylb
 
