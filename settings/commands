@@ -5,10 +5,10 @@ d build -t myfrontend ./frontend/
 d network create mb
 d run --network mb -d --name api -v /home/wesley/moneyboard/data:/var/www/api/data myapi 
 d run --network mb -d --name frontend myfrontend
-d run --network mb -d --name lb -p 80:80 mylb
+d run --network mb -d --name lb -p 80:80 -p 443:443 -v certs:/etc/letsencrypt -v certs-data:/data/letsencrypt mylb
 
 
 d stack deploy --compose-file moneyboard.yml mb
 
 
-
+docker run -it --rm -v certs:/etc/letsencrypt -v certs-data:/data/letsencrypt deliverous/certbot certonly --webroot --webroot-path=/data/letsencrypt -d example.com --staging

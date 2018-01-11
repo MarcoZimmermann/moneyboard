@@ -7,8 +7,12 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
+    volumes:
+      - certs:/etc/letsencrypt
+      - certs-data:/data/letsencrypt
     ports:
       - 80:80    
+      - 443:443
     networks:
       - moneyboard
   api:
@@ -31,6 +35,9 @@ services:
     networks:
       - moneyboard
  
- 
+volumes:
+  certs:
+  certs-data:
+
 networks:
   moneyboard:
